@@ -17,16 +17,12 @@ class TestExec7za(unittest.TestCase):
         self.obj.add_args('test.txt')
         self.assertEqual(self.obj.get_args(), ['7za', 'a', 'test.zip', 'test.txt'])
 
-    def test_defaul(self):
-        self.assertEqual(self.obj.get_returncode(), -1)
-        self.assertEqual(self.obj.get_stdout(), "")
-        self.assertEqual(self.obj.get_stderr(), "")
     
     def test_empty_run(self):
-        self.obj.run()
-        self.assertNotEqual(self.obj.get_returncode, 0)
-        self.assertRegex(self.obj.get_stdout(), r'<Switches>')
-        self.assertEqual(self.obj.get_stderr(), '')
+        zc = self.obj.run()
+        self.assertEqual(zc.get_returncode(), 0)
+        self.assertRegex(zc.get_stdout(), r'<Switches>')
+        self.assertEqual(zc.get_stderr(), '')
 
 class TestExec7zaRun(unittest.TestCase):
 
@@ -43,11 +39,10 @@ class TestExec7zaRun(unittest.TestCase):
         self.obj = Exec7za('a', testzip, testfile)
 
     def test_run(self) -> None:
-        rc = self.obj.run()
-        self.assertEqual(rc, 0)
-        self.assertEqual(self.obj.get_returncode(), 0)
-        self.assertRegex(self.obj.get_stdout(),r'Everything is Ok')
-        self.assertEqual(self.obj.get_stderr(), "")
+        zc = self.obj.run()
+        self.assertEqual(zc.get_returncode(), 0)
+        self.assertRegex(zc.get_stdout(),r'Everything is Ok')
+        self.assertEqual(zc.get_stderr(), "")
 
     def tearDown(self) -> None:
         shutil.rmtree(self.testdir)
