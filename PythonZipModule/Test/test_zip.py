@@ -67,6 +67,26 @@ class TestZipper(unittest.TestCase):
         zipper.extractWithPath(extractdir2, createDir=True)
         self.assertTrue(os.path.isfile(os.path.join(extractdir2, 'testfile.txt')))
 
+    def test_list(self):
+        z = Zipper(os.path.join(self.testdir, 'testzip.zip'))
+        with self.assertRaises(OSError):
+            z.getList()
+        z.add(self.testfile, self.testfile2)
+        zl = z.getList()
+        fl = zl.get_fileList()
+        self.assertEqual(len(fl), 2)
+        self.assertEqual(fl, [os.path.basename(self.testfile), os.path.basename(self.testfile2)])
+
+        flfilter = zl.get_fileList(regex=r'2.txt$')
+        self.assertEqual(len(flfilter), 1)
+        self.assertEqual(flfilter[0], os.path.basename(self.testfile2))
+
+        flf = zl.get_fileListFull()
+        flf2 = zl.get_fileListFull(regex=r'2.txt$')
+        self.assertEqual(len(flf), 2)
+        self.assertEqual(flf2[0][5], os.path.basename(self.testfile2))
+
+
 
     def tearDown(self) -> None:
         shutil.rmtree(self.testdir)

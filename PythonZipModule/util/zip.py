@@ -86,10 +86,11 @@ class Zipper():
 
 
     def getList(self) -> ZipList:
+        self._zipCheck()
         e7obj = Exec7za('l', self.zipfile)
         zc = e7obj.run()
 
-        return ZipList(zc.get_stdout())
+        return ZipList(zc)
 
 
     def extract(self, outdir:str, *filelist, createDir:bool=False) -> ZipComplete:
